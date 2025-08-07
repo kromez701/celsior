@@ -1278,7 +1278,7 @@ await import("//celsior-shop.com/cdn/shopifycloud/shop-js/modules/v2/chunk.commo
   <link href="//celsior-shop.com/cdn/shop/t/2/assets/component-loading-overlay.css?v=167310470843593579841751279405" rel="stylesheet" type="text/css" media="all" />
   <link href="//celsior-shop.com/cdn/shop/t/2/assets/component-deferred-media.css?v=54092797763792720131751279405" rel="stylesheet" type="text/css" media="all" />
   <link href="//celsior-shop.com/cdn/shop/t/2/assets/component-list-payment.css?v=69253961410771838501751279405" rel="stylesheet" type="text/css" media="all" />
-  <script src="//celsior-shop.com/cdn/shop/t/2/assets/global.js?v=133650866124046141791751279406" async></script>
+  <!-- <script src="//celsior-shop.com/cdn/shop/t/2/assets/global.js?v=133650866124046141791751279406" async></script> -->
 <style data-shopify>.section-template--25329614258551__main-padding {
       padding-top: 0px;
       padding-bottom: 16px;
@@ -7247,4 +7247,81 @@ function _typeof(t){return(_typeof="function"==typeof Symbol&&"symbol"==typeof S
 
 
 </div></body>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Main slider elements
+    const mainSlider = document.querySelector('#Slider-Gallery-template--25329614258551__main');
+    const mainSlides = Array.from(mainSlider.querySelectorAll('.slider__slide'));
+    const mainPrevBtn = mainSlider.closest('slider-component').querySelector('.slider-button--prev');
+    const mainNextBtn = mainSlider.closest('slider-component').querySelector('.slider-button--next');
+
+    // Thumbnail slider elements
+    const thumbSlider = document.querySelector('#Slider-Thumbnails-template--25329614258551__main');
+    const thumbSlides = Array.from(thumbSlider.querySelectorAll('.slider__slide'));
+    const thumbPrevBtn = thumbSlider.closest('slider-component').querySelector('.slider-button--prev');
+    const thumbNextBtn = thumbSlider.closest('slider-component').querySelector('.slider-button--next');
+
+    // Slide navigation functions
+    let currentSlide = 0;
+
+    function showSlide(index) {
+        // Hide all slides
+        mainSlides.forEach(slide => slide.style.display = 'none');
+        thumbSlides.forEach(slide => slide.classList.remove('active'));
+        
+        // Show selected slide
+        mainSlides[index].style.display = 'block';
+        thumbSlides[index].classList.add('active');
+        currentSlide = index;
+        
+        // Update button states
+        mainPrevBtn.disabled = index === 0;
+        mainNextBtn.disabled = index === mainSlides.length - 1;
+    }
+
+    function nextSlide() {
+        if (currentSlide < mainSlides.length - 1) {
+            showSlide(currentSlide + 1);
+        }
+    }
+
+    function prevSlide() {
+        if (currentSlide > 0) {
+            showSlide(currentSlide - 1);
+        }
+    }
+
+    // Event listeners for main slider arrows
+    mainNextBtn.addEventListener('click', nextSlide);
+    mainPrevBtn.addEventListener('click', prevSlide);
+
+    // Event listeners for thumbnail arrows
+    thumbNextBtn.addEventListener('click', () => {
+        thumbSlider.scrollBy({ left: 100, behavior: 'smooth' });
+    });
+    
+    thumbPrevBtn.addEventListener('click', () => {
+        thumbSlider.scrollBy({ left: -100, behavior: 'smooth' });
+    });
+
+    // Event listeners for thumbnail clicks
+    thumbSlides.forEach((thumb, index) => {
+        thumb.addEventListener('click', () => {
+            showSlide(index);
+            // Center the selected thumbnail
+            thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        });
+    });
+
+    // Initialize slider
+    showSlide(0);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') nextSlide();
+        if (e.key === 'ArrowLeft') prevSlide();
+    });
+});
+  </script>
 </html>
